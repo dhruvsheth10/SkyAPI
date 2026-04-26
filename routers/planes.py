@@ -131,5 +131,6 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         #     "Distance from you (miles):": distances,
             
         # }
-        
+        if len(data) == 1:
+            data['message'] = "No planes detected."
         return data
