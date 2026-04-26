@@ -117,7 +117,6 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
                 data[planes[j]] = {'Aircraft': aircraft}
 
                 data[planes[j]]['aircraft model'] = model
-                data[planes[j]]['icao'] = icaos[j]
                 data[planes[j]]['origin'] = origin[j]
                 data[planes[j]]['destination'] = destination[j]
                 data[planes[j]]['altitude (feet)'] = altitudes[j]
