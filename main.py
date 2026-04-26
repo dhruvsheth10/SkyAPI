@@ -8,6 +8,6 @@ from routers import iss, planes
 def root():
     return "Hello World"
 
-
+#uvicorn main:app --reload   
 app.include_router(iss.router)
 app.include_router(planes.router)
