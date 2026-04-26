@@ -2,8 +2,12 @@
 from fastapi import APIRouter
 import httpx
 import json
+import os
+from dotenv import load_dotenv
 router = APIRouter()
+load_dotenv()
 @router.get('/iss')
+
 async def findISS():
     async with httpx.AsyncClient(timeout=50.0) as client:
         raw = await client.get("http://api.open-notify.org/iss-now.json")
@@ -13,17 +17,19 @@ async def findISS():
         del data['timestamp']
         lat = data['iss_position']['latitude']
         long = data['iss_position']['longitude']
+        username = os.getenv("USERNAME")
         response = await client.get(url, 
         params={
             "lat": lat, 
             "lng": long, 
-            "username": "dhruv17", 
+            "username": username, 
             "cities": "cities100000", 
             "maxRows": 1
         }
     )
+        key = os.getenv("LOCATIONIQ_KEY")
         response2 = await client.get("https://us1.locationiq.com/v1/reverse",params={
-        'key': 'pk.8f3a1ddfd1dbe7e1c69dd48847313e14',
+        'key': key,
         'lat': lat,      
         'lon': long,
         'format': 'json',

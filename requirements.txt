@@ -1,3 +1,5 @@
 fastapi[standard]
 httpx
-routers
+metpy
+uvicorn
+python-dotenv

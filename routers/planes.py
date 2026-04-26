@@ -8,6 +8,7 @@ from metpy.units import units
 from fastapi.responses import JSONResponse
 
 import json
+
 def calcDistance(lat,long,planelat,planelong):
     lat = math.radians(lat)
     long = math.radians(long)
