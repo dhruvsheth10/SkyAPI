@@ -1,6 +1,6 @@
 # SkyAPI
 
-A FastAPI-powered REST API that tells you what's happening above your head right now — from commercial flights cruising at 35,000 feet to the International Space Station hurtling through orbit at 17,500 mph.  
+A FastAPI-powered REST API that tells you what's happening above your head right now!
 Built as part of Hack Club's RaspAPI YSWS.
 
 ---
