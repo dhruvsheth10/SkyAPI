@@ -29,13 +29,10 @@ router = APIRouter()
 @router.get('/planesabove', response_class=PrettyJSONResponse)
 async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers: int | None=None):
     async with httpx.AsyncClient(timeout=30.0) as client:
-        if miles or kilometers > 1000 and miles or kilometers <= 0:
-            raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="radius limit exceeded"
-        )
         radius = 25
         if miles and not kilometers:
+            if miles > 1000 or miles <= 0:
+                raise HTTPException(status_code=status.HTTP_413_CONTENT_TOO_LARGE, detail="radius limit exceeded")
             radius = str(miles) + " miles"
             latdelta = miles/69
             longdelta = miles/(math.cos(math.radians(lat)) * 69.17)
@@ -44,6 +41,8 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
             longmin = lon-longdelta
             longmax = lon+longdelta
         elif kilometers and not miles:
+            if kilometers > 1000 or kilometers <= 0:
+                raise HTTPException(status_code=status.HTTP_413_CONTENT_TOO_LARGE, detail="radius limit exceeded")
             radius = str(kilometers) + " kilometers"
             latdelta = kilometers/111
             longdelta = kilometers/(111.32*math.cos(math.radians(lat)))
@@ -51,6 +50,8 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
             latmax = lat+latdelta
             longmin = lon-longdelta
             longmax = lon+longdelta
+        elif kilometers and miles:
+            raise HTTPException(status_code=status.HTTP_413_CONTENT_TOO_LARGE, detail="radius limit exceeded")
         else:
             latdelta = radius/69
             longdelta = radius/(math.cos(math.radians(lat)) * 69.17)
