@@ -45,7 +45,7 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
     "radius": "15 miles",
     "UAL1434 ": {
         "Aircraft": "UAL1434 United Airlines",
-        "Model": 787-9 Dreamliner
+        "Model": 787-9 Dreamliner,
         "origin": "Chicago",
         "destination": "Washington DC",
         "altitude (feet)": 6950,
