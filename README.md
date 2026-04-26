@@ -45,7 +45,7 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
     "radius": "15 miles",
     "UAL1434 ": {
         "Aircraft": "UAL1434 United Airlines",
-        "Model": 787-9 Dreamliner,
+        "Model": "787-9 Dreamliner",
         "origin": "Chicago",
         "destination": "Washington DC",
         "altitude (feet)": 6950,
@@ -65,7 +65,8 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
 - GeoNames — Reverse geocoding for ISS location
 - LocationIQ — Ocean/sea name fallback
 - OpenSky Network — Live flight transponder data
-- adsbdb — Flight route and airline info
+- adsbdb — Flight route and airline info 
+- json database (not in repo bcuz 150mb) to map icao24 to aircraft model
 
 ---
 
