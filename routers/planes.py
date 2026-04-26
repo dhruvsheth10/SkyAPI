@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 import httpx
 import math
 from datetime import datetime
@@ -13,7 +13,7 @@ def calcDistance(lat,long,planelat,planelong):
     long = math.radians(long)
     planelat = math.radians(planelat)
     planelong = math.radians(planelong)
-    dist = 7918 * math.asin(math.sqrt(math.sin((planelat-lat)/2)**2)+(math.cos(lat)*math.cos(planelat))*math.sin((planelong-long)/2)**2)
+    dist = 7917.6 * math.asin(math.sqrt(math.sin((planelat-lat)/2)**2)+(math.cos(lat)*math.cos(planelat))*math.sin((planelong-long)/2)**2)
     return dist
 class PrettyJSONResponse(JSONResponse):
     def render(self, content) -> bytes:
@@ -29,6 +29,11 @@ router = APIRouter()
 @router.get('/planesabove', response_class=PrettyJSONResponse)
 async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers: int | None=None):
     async with httpx.AsyncClient(timeout=30.0) as client:
+        if miles or kilometers > 1000 and miles or kilometers <= 0:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="radius limit exceeded"
+        )
         radius = 25
         if miles and not kilometers:
             radius = str(miles) + " miles"
