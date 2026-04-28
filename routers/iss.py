@@ -17,7 +17,7 @@ async def findISS():
         del data['timestamp']
         lat = data['iss_position']['latitude']
         long = data['iss_position']['longitude']
-        username = os.getenv("USERNAME")
+        username = os.getenv("GEOUSERNAME")
         response = await client.get(url, 
         params={
             "lat": lat, 
