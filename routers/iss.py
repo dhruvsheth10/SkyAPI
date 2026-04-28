@@ -37,10 +37,12 @@ async def findISS():
         'addressdetails': 1
     } )
         temp = response.json()
-        print(f"temp={temp}")
+        #print(f"temp={temp}")
         try:
-            print(temp)
+            #print(f"geonames response: {temp}")
             country = temp['geonames'][0]['countryName']
+        except KeyError:
+            country = "rate limited! try again in ~30s"
         except IndexError:
             temp = response2.json()
             address = temp.get('address', {})
