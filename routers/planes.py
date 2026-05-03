@@ -26,7 +26,7 @@ class PrettyJSONResponse(JSONResponse):
             content,
             ensure_ascii=False,
             allow_nan=False,
-            indent=4,  # Adjust indentation level here
+            indent=4, 
             separators=(",", ": "),
         ).encode("utf-8")
 
