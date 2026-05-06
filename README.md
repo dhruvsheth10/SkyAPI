@@ -1,7 +1,7 @@
 # SkyAPI
 
 A FastAPI-powered REST API that tells you what's happening above your head right now!
-Built as part of Hack Club's RaspAPI YSWS.
+Built as part of Hack Club
 
 ---
 
