@@ -5,12 +5,12 @@ import math
 from datetime import datetime
 import time
 import metpy.calc as mpcalc
-
 from metpy.units import units
 from fastapi.responses import JSONResponse
+from routers.route_bridge import lookup_flight_route
 from helper import model_lookup
 import json
-
+from datetime import datetime
 
 
 def calcDistance(lat,long,planelat,planelong):
@@ -26,7 +26,7 @@ class PrettyJSONResponse(JSONResponse):
             content,
             ensure_ascii=False,
             allow_nan=False,
-            indent=4,  # Adjust indentation level here
+            indent=4,  
             separators=(",", ": "),
         ).encode("utf-8")
 
@@ -34,7 +34,7 @@ router = APIRouter()
 @router.get('/planesabove', response_class=PrettyJSONResponse)
 async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers: int | None=None):
     async with httpx.AsyncClient(timeout=30.0) as client:
-        radius = 25
+        radius = 15
         if miles and not kilometers:
             if miles > 1000 or miles <= 0:
                 raise HTTPException(status_code=status.HTTP_413_CONTENT_TOO_LARGE, detail="radius limit exceeded")
@@ -68,11 +68,9 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
 
         raw = await client.get(f"https://opensky-network.org/api/states/all?lamin={latmin}&lomin={longmin}&lamax={latmax}&lomax={longmax}")
         raw = raw.json()
-        time2 = datetime.fromtimestamp(raw['time'])
-        time2=time2.strftime("%Y-%m-%d %H:%M:%S")
+        # time2 = datetime.fromtimestamp(raw['time'])
+        # time2=time2.strftime("%Y-%m-%d %H:%M:%S")
         planes = []
-        origin = []
-        destination = []
         altitudes = []
         speeds = []
         vsps = []
@@ -83,46 +81,48 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         j=0
 
         if raw['states']:
+            # print(f"raw[states]={raw['states']}")
+            #print("yes, raw of states")
             data['radius'] = radius
             for i in range(len(raw['states'])):
+                
                 plane = raw['states'][i]
                 callsign = plane[1].strip()
-                flightinfo = await client.get(f"https://api.adsbdb.com/v0/callsign/{callsign}")
-                flightinfo=flightinfo.json()
-                if flightinfo['response'] == 'unknown callsign':
-                    continue
                 if plane[8] == True:
+                    #print("continue1")
                     continue
                 current = int(time.time())
                 if abs(int(plane[4])-current) > 60:
+                    #print("continue2")
+                    continue
+                route = await lookup_flight_route(client, callsign)
+                if not route:
+                    #print("continue3")
                     continue
                 planes.append(plane[1])
-                origin.append(flightinfo['response']['flightroute']['origin']['municipality'])
-                destination.append(flightinfo['response']['flightroute']['destination']['municipality'])
-
+                #print(f"i={i},data={data[j]}")
                 altitudes.append(round((plane[7]*3.28084)))
                 speeds.append(round((plane[9]*2.237)))
                 directions.append(mpcalc.angle_to_direction(plane[10] * units.degree))
                 vsps.append(round(plane[11]*3.281*60))
+                squawk = plane[14]
                 planelat = (plane[6])
                 icaos.append(plane[0])
                 model = model_lookup.get(plane[0])
-                print(f"model={model_lookup.get('aded7e', "Not found")},icao={icaos}")
                 planelong = (plane[5])
                 distances.append(round(calcDistance(lat,lon,planelat,planelong),2))
             
-                #print(f"FLIGHTINFO ={flightinfo}")
-                airlinename = flightinfo['response']['flightroute']['airline']['name']
-                aircraft = str(callsign) + " " + str(airlinename)
+                airlinename = f" {route.airline}" if route.airline else ""
+                aircraft = str(callsign) + airlinename
                 data[planes[j]] = {'Aircraft': aircraft}
-
                 data[planes[j]]['aircraft model'] = model
-                data[planes[j]]['origin'] = origin[j]
-                data[planes[j]]['destination'] = destination[j]
+                data[planes[j]]['origin'] = route.origin
+                data[planes[j]]['destination'] = route.destination
                 data[planes[j]]['altitude (feet)'] = altitudes[j]
                 data[planes[j]]['speed (miles per hour)'] = speeds[j]
                 data[planes[j]]['heading'] = directions[j]
                 data[planes[j]]['verical speed (feet per minute)'] = vsps[j]
+                data[planes[j]]['squawk'] = squawk
                 data[planes[j]]['distance from you (miles)'] = distances[j]
                 j+=1
             
@@ -141,6 +141,26 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         #     "Distance from you (miles):": distances,
             
         # }
-        if len(data) == 1:
+        empty = False
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        if j == 0:
+            empty = True
+            print(f'data={data}')
             data['message'] = "No planes detected."
-        return data
+            data['radius'] = radius
+            data['Date/Time'] = now
+            return data
+        
+
+        if not empty:
+            #print(data)
+            planes_list = [val for key, val in data.items() if isinstance(val,dict)]
+            sorted_planes = sorted(planes_list, key=lambda item: item['distance from you (miles)'])
+            
+            result = {
+                "radius": radius,
+                "Date/Time": now,
+                "planes": sorted_planes
+            }
+            return result

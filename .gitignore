@@ -1,7 +1,6 @@
 .github/
 .dockerignore
 Dockerfile
-fly.toml
 __pycache__/
 *.pyc
 .env

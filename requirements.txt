@@ -3,3 +3,4 @@ httpx
 metpy
 uvicorn
 python-dotenv
+libsql
