@@ -1,6 +1,6 @@
 # SkyAPI
 
-A FastAPI-powered REST API that tells you what's happening above your head right now!
+A Python REST API that tells you what's happening above your head right now!
 Built as part of Hack Club's RaspAPI YSWS.
 
 
@@ -62,5 +62,5 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
 
 
 
-# Uses API keys, has multiple routers, database integration, lots of external API usage, rate limiting and spam prevention, error handling etc.
+### Uses API keys, has multiple routers, database integration, lots of external API usage, rate limiting and spam prevention, error handling etc.
 
