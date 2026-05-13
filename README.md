@@ -3,7 +3,6 @@
 A FastAPI-powered REST API that tells you what's happening above your head right now!
 Built as part of Hack Club's RaspAPI YSWS.
 
----
 
 ## What It Does
 
@@ -12,14 +11,10 @@ SkyAPI has two modules:
 - **`/iss`** — Track the real-time location of the International Space Station, including what country or ocean it's currently flying over.
 - **`/planesabove`** — Find all aircraft currently flying above a given coordinate within a specified radius, complete with airline, origin, destination, altitude, speed, heading, and distance from you.
 
----
-
 ## Endpoints
 
 ### `GET /`
 Returns hello world!
-
----
 
 ### `GET /iss`
 Returns the current position of the ISS and what it's flying over.
@@ -28,8 +23,6 @@ Returns the current position of the ISS and what it's flying over.
 ```
 Exact coordinates of the International Space Station: (32.45, -97.12). The ISS is currently over: United States!
 ```
-
----
 
 ### `GET /planesabove`
 Returns all airborne flights within a radius of a given coordinate.
@@ -57,7 +50,6 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
 }
 ```
 
----
 
 ## Data Sources
 
@@ -68,11 +60,7 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
 - Flightradar24 — Live scheduled route (origin/destination) by callsign
 - json database (not in repo bcuz 150mb) to map icao24 to aircraft model
 
----
 
-## Built With
 
-- FastAPI
-- httpx
-- MetPy
-- Python 3.10+
+# Uses API keys, has multiple routers, database integration, lots of external API usage, rate limiting and spam prevention, error handling etc.
+
