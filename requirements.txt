@@ -4,3 +4,5 @@ metpy
 uvicorn
 python-dotenv
 libsql
+requests
+jinja2
