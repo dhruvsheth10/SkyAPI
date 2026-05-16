@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import httpx
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -97,7 +98,7 @@ async def lookup_flight_route(
     )
 
 
-@router.get("/route")
+@router.get("/route", response_class=JSONResponse)
 async def get_route(callsign: str):
     async with httpx.AsyncClient(timeout=10.0) as client:
         route = await lookup_flight_route(client, callsign)
