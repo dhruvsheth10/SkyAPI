@@ -89,11 +89,12 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
                 plane = raw['states'][i]
                 callsign = plane[1].strip()
                 if plane[8] == True:
-                    #print("continue1")
+                    #print("on ground")
                     continue
-                current = int(time.time())
+                #current = int(time.time())
                 if abs(int(plane[4])-current) > 60:
                     print("failed stale check")
+                    print(f"planetime={plane[4]}, current = {current}")
                     continue
                 route = await lookup_flight_route(client, callsign)
                 if not route:
