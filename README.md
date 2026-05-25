@@ -16,7 +16,7 @@ SkyAPI has two modules:
 ### `GET /`
 Returns hello world
 
-### `GET /callsign`
+### `GET /route`
 Enter a callsign to get some stats about the flight
 
 ### `GET /iss`
