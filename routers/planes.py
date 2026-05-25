@@ -93,7 +93,7 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
                     continue
                 current = int(time.time())
                 if abs(int(plane[4])-current) > 60:
-                    #print("continue2")
+                    print("failed stale check")
                     continue
                 route = await lookup_flight_route(client, callsign)
                 if not route:
