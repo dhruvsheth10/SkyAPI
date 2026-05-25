@@ -14,7 +14,10 @@ SkyAPI has two modules:
 ## Endpoints
 
 ### `GET /`
-Returns hello world!
+Returns hello world
+
+### `GET /callsign`
+Enter a callsign to get some stats about the flight
 
 ### `GET /iss`
 Returns the current position of the ISS and what it's flying over.
