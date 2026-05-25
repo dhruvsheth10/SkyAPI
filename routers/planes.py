@@ -79,7 +79,7 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         data = {}
         icaos = []
         j=0
-
+        current = (int(raw['time']))
         if raw['states']:
             # print(f"raw[states]={raw['states']}")
             #print("yes, raw of states")
