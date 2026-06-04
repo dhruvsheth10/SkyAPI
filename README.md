@@ -1,41 +1,37 @@
-# SkyAPI
+### SkyAPI
+tells you what's happening above your head right now. built for Hack Club's RaspAPI YSWS.
 
-A Python REST API that tells you what's happening above your head right now!
-Built as part of Hack Club's RaspAPI YSWS.
+#### what it does
 
+two endpoints:
+- `/iss` — real-time ISS location + what country or ocean it's flying over
+- `/planesabove` — all aircraft above a given coordinate within a given radius (airline, origin, destination, altitude, speed, heading, distance from you)
 
-## What It Does
+#### endpoints
 
-SkyAPI has two modules:
+##### /`
+hello world
 
-- **`/iss`** — Track the real-time location of the International Space Station, including what country or ocean it's currently flying over.
-- **`/planesabove`** — Find all aircraft currently flying above a given coordinate within a specified radius, complete with airline, origin, destination, altitude, speed, heading, and distance from you.
+##### /route
+enter a callsign, get stats about the flight
 
-## Endpoints
+##### /iss
+current ISS position and what it's flying over
 
-### `GET /`
-Returns hello world
-
-### `GET /route`
-Enter a callsign to get some stats about the flight
-
-### `GET /iss`
-Returns the current position of the ISS and what it's flying over.
-
-**Example response:**
+example response:
 ```
 Exact coordinates of the International Space Station: (32.45, -97.12). The ISS is currently over: United States!
 ```
 
-### `GET /planesabove`
-Returns all airborne flights within a radius of a given coordinate.
+##### /planesabove
+all airborne flights within a radius of given coordinates
 
-**Example request:**
+example request:
 ```
 GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
 ```
 
-**Example response:**
+example response:
 ```json
 {
     "radius": "15 miles",
@@ -53,17 +49,13 @@ GET /planesabove?lat=38.8977&lon=-77.0366&miles=15
 }
 ```
 
+#### data sources
 
-## Data Sources
+- Open Notify — ISS position
+- GeoNames — reverse geocoding for ISS location
+- LocationIQ — ocean/sea name fallback
+- OpenSky Network — live flight transponder data
+- Flightradar24 — origin/destination by callsign
+- local json database (not in repo bcuz 150mb) to map icao24 to aircraft model
 
-- Open Notify — ISS real-time position
-- GeoNames — Reverse geocoding for ISS location
-- LocationIQ — Ocean/sea name fallback
-- OpenSky Network — Live flight transponder data
-- Flightradar24 — Live scheduled route (origin/destination) by callsign
-- json database (not in repo bcuz 150mb) to map icao24 to aircraft model
-
-
-
-### Uses API keys, has multiple routers, database integration, lots of external API usage, rate limiting and spam prevention, error handling etc.
-
+uses API keys, multiple routers, database integration, a bunch of external APIs, rate limiting, spam prevention, error handling, etc.
