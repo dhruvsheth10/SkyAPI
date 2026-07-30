@@ -82,7 +82,7 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         icaos = []
         j=0
        # current = (int(rawtime['unix_timestamp']))
-        planetime = plane[4] if plane[4] is not None else plane[3]
+        planetime = plane[4]
         current = int(time.time())
         if raw['states']:
             # print(f"raw[states]={raw['states']}")
