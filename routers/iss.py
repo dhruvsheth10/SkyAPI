@@ -13,7 +13,6 @@ load_dotenv()
 
 
 
-
 async def findISS():
     async with httpx.AsyncClient(timeout=50.0) as client:
         raw = await client.get("http://api.open-notify.org/iss-now.json")

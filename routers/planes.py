@@ -68,8 +68,8 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
 
         raw = await client.get(f"https://opensky-network.org/api/states/all?lamin={latmin}&lomin={longmin}&lamax={latmax}&lomax={longmax}")
         raw = raw.json()
-        rawtime = await client.get(f"https://timeapi.io/api/v1/time/current/unix")
-        rawtime=rawtime.json()
+        # rawtime = await client.get(f"https://timeapi.io/api/v1/time/current/unix")
+        # rawtime=rawtime.json()
         # time2 = datetime.fromtimestamp(raw['time'])
         # time2=time2.strftime("%Y-%m-%d %H:%M:%S")
         planes = []
@@ -81,7 +81,9 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         data = {}
         icaos = []
         j=0
-        current = (int(rawtime['unix_timestamp']))
+       # current = (int(rawtime['unix_timestamp']))
+        planetime = plane[4] if plane[4] is not None else plane[3]
+        current = int(time.time())
         if raw['states']:
             # print(f"raw[states]={raw['states']}")
             #print("yes, raw of states")
@@ -94,7 +96,7 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
                     #print("on ground")
                     continue
                 #current = int(time.time())
-                if abs(int(plane[4])-current) > 40:
+                if abs(int(planetime)-current) > 60:
                     print("failed stale check")
                     print(f"planetime={plane[4]}, current = {current}")
                     continue
