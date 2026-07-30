@@ -128,9 +128,9 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
                 data[planes[j]]['destination'] = route.destination
                 data[planes[j]]['altitude (feet)'] = altitudes[j]
                 data[planes[j]]['speed (miles per hour)'] = speeds[j]
-                data[planes[j]]['heading'] = directions[j]
                 data[planes[j]]['verical speed (feet per minute)'] = vsps[j]
                 data[planes[j]]['squawk'] = squawk
+                data[planes[j]]['heading'] = directions[j]
                 data[planes[j]]['distance from you (miles)'] = distances[j]
                 j+=1
             
