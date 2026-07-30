@@ -82,7 +82,6 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
         icaos = []
         j=0
        # current = (int(rawtime['unix_timestamp']))
-        planetime = plane[4]
         current = int(time.time())
         if raw['states']:
             # print(f"raw[states]={raw['states']}")
@@ -96,6 +95,7 @@ async def planesAbove(lat: float, lon: float, miles: int | None=None, kilometers
                     #print("on ground")
                     continue
                 #current = int(time.time())
+                planetime = plane[4] if plane[4] is not None else plane[3]
                 if abs(int(planetime)-current) > 60:
                     print("failed stale check")
                     print(f"planetime={plane[4]}, current = {current}")
