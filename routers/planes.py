@@ -18,8 +18,11 @@ def calcDistance(lat,long,planelat,planelong):
     long = math.radians(long)
     planelat = math.radians(planelat)
     planelong = math.radians(planelong)
-    dist = 7917.6 * math.asin(math.sqrt(math.sin((planelat-lat)/2)**2)+(math.cos(lat)*math.cos(planelat))*math.sin((planelong-long)/2)**2)
-    return dist
+    dlat = planelat - lat
+    dlon = planelong - long
+    temp = math.sin(dlat / 2)**2 + math.cos(lat) * math.cos(planelat) * math.sin(dlon / 2)**2
+
+    return 7917.6 * math.asin(math.sqrt(temp))
 class PrettyJSONResponse(JSONResponse):
     def render(self, content) -> bytes:
         return json.dumps(
